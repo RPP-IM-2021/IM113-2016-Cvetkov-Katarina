@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,7 @@ import rpp2021.repository.ProjekatRepository;
 import rpp2021.repository.StudentRepository;
 
 @RestController
+@CrossOrigin
 public class StudentRestController {
 
 	@Autowired
@@ -62,6 +64,7 @@ public class StudentRestController {
 		return studentRepository.findByImeContainingIgnoreCase(ime);
 	}
 	
+	@ApiOperation(value = "Returns Students whit Projekat id that was forwarded as path variable.")
 	@GetMapping("studentZaProjekat/{id}")
 	public Collection<Student> getAllProjekat(@PathVariable("id") Integer id) {
 		if (studentRepository.findById(id).isPresent()) {
@@ -72,6 +75,7 @@ public class StudentRestController {
 		return new ArrayList<Student>();
 	}
 	
+	@ApiOperation(value = "Returns Students whit Grupa id that was forwarded as path variable.")
 	@GetMapping("studentZaGrupa/{id}")
 	public Collection<Student> getAllGrupa(@PathVariable("id") Integer id) {
 		if (studentRepository.findById(id).isPresent()) {
@@ -82,7 +86,7 @@ public class StudentRestController {
 		return new ArrayList<Student>();
 	}
 	
-	@ApiOperation(value = "Adds new Smer to database.")
+	@ApiOperation(value = "Adds new Student to database.")
 	@PostMapping("student")
 	public ResponseEntity<Student> addStudent(@RequestBody Student student) {
 		Student savedStudent = studentRepository.save(student);
@@ -90,7 +94,7 @@ public class StudentRestController {
 		return ResponseEntity.created(location).body(savedStudent);
 	}
 
-	@ApiOperation(value = "Updates Smer from database with id that was forwarded as path variable with values forwarded in Request Body.")
+	@ApiOperation(value = "Updates Student from database with id that was forwarded as path variable with values forwarded in Request Body.")
 	@PutMapping("student/{id}")
 	public ResponseEntity<Student> updateStudent(@RequestBody Student student, @PathVariable("id") Integer id) {
 		if (studentRepository.existsById(id)) {
